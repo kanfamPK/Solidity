@@ -4,7 +4,9 @@ pragma solidity ^0.8.0;
 import "./PriceConverter.sol";
 // import "@nomiclabs/buidler/console.log";
 
-error NotOwner();
+error FailWithdraw(string message);
+error NotSendEnough(string message);
+error Forbidden(string message);
 
 contract FundMe {
 
@@ -19,9 +21,8 @@ contract FundMe {
     }
 
     function fund() public payable {
-        // require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enough");
         if (msg.value.getConversionRate() < minimumUsd) {
-            revert NotOwner();
+            revert NotSendEnough({message: "Didn't send enough"});
         }
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = msg.value;
@@ -34,11 +35,24 @@ contract FundMe {
 
             (bool sent, bytes memory data) = payable(msg.sender).call{value: address(this).balance}("");
             require(sent, "Failed to send Ether");
+            if (!sent) {
+                revert FailWithdraw({message: "Withdraw Failed"});
+            }
         }
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Forbidden");
+        if (msg.sender != owner) {
+                revert Forbidden({message: "Forbidden"});
+            }
         _;
+    }
+
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
     }
 }
