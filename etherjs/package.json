@@ -1,15 +1,19 @@
 {
   "name": "etherjs",
   "version": "1.0.0",
-  "description": "",
   "main": "deploy.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "corepack": "^0.12.2",
+    "@types/fs-extra": "^9.0.13",
+    "ethers": "^5.6.9",
+    "fs-extra": "^10.1.0",
     "solc": "^0.8.16"
+  },
+  "scripts": {
+    "compile": "yarn solcjs --bin --abi --include-path node_modules --base-path . SimpleStorage.sol -o ."
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.2",
+    "typescript": "^4.7.4"
   }
 }
