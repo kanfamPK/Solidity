@@ -5,7 +5,8 @@ import "dotenv/config";
 import "solidity-coverage";
 import "@typechain/hardhat";
 import "@nomiclabs/hardhat-ethers";
-import { task, HardhatUserConfig } from "hardhat/config"
+import { task, HardhatUserConfig } from "hardhat/config";
+import "./tasks/block-number";
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",

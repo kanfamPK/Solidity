@@ -1,5 +1,6 @@
 import { ethers, run, network } from "hardhat";
 import "dotenv/config";
+import { config } from "../config";
 
 async function main() {
   // const currentTimestampInSeconds = Math.round(Date.now() / 1000);
@@ -20,11 +21,19 @@ async function main() {
   const simpleStorage = await SimpleStorageFactory.deploy();
   await simpleStorage.deployed();
   console.log(`Deployed, contract address: ${simpleStorage.address}`);
+
   // only veriy the contract if the current network is rinkeby network
-  if (network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY) {
+  if (network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY && config.etherScan) {
     await simpleStorage.deployTransaction.wait(6);
     await verify(simpleStorage.address, []);
   }
+
+  const currentFavoriteNumber =  await simpleStorage.retrieve();
+  console.log(`Current favorite number: ${currentFavoriteNumber}`);
+  const updateResponse = await simpleStorage.store("7");
+  await updateResponse.wait(1);
+  const updatedFavoriteNumber =  await simpleStorage.retrieve();
+  console.log(`Current favorite number: ${updatedFavoriteNumber}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
