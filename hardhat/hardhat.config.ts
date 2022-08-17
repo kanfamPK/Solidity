@@ -15,6 +15,12 @@ const config: HardhatUserConfig = {
       url: "https://eth-rinkeby.alchemyapi.io/v2/mRTunZyOSlnIcyqHdSYSic2VPSd0gpqA",
       accounts: [process.env.RINKEBY_PRIVATE_KEY || ''],
       chainId: 4
+    },
+    localhost: {
+      url: "http://127.0.0.1:8545/",
+      // Hardhat will automatically fills these accounts for us
+      // accounts: ...
+      chainId: 31337
     }
   },
   solidity: "0.8.9",
