@@ -16,24 +16,26 @@ contract FundMe {
     using PriceConverter for uint256;
     address public owner;
 
-    constructor() {
+    AggregatorV3Interface public priceFeed;
+
+    constructor(address priceFeedAddress) {
         owner = msg.sender;
+        priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     function fund() public payable {
-        if (msg.value.getConversionRate() < minimumUsd) {
+        if (msg.value.getConversionRate(priceFeed) < minimumUsd) {
             revert NotSendEnough({message: "Didn't send enough"});
         }
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = msg.value;
-        // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     function withdraw() public onlyOwner {
         for (uint8 i = 0; i < funders.length; i++) {
             addressToAmountFunded[funders[i]] = 0;
 
-            (bool sent, bytes memory data) = payable(msg.sender).call{value: address(this).balance}("");
+            (bool sent,) = payable(msg.sender).call{value: address(this).balance}("");
             require(sent, "Failed to send Ether");
             if (!sent) {
                 revert FailWithdraw({message: "Withdraw Failed"});
