@@ -13,17 +13,20 @@ const config: HardhatUserConfig = {
   networks: {
     rinkeby: {
       url: "https://eth-rinkeby.alchemyapi.io/v2/mRTunZyOSlnIcyqHdSYSic2VPSd0gpqA",
-      accounts: [process.env.RINKEBY_PRIVATE_KEY || ''],
-      chainId: 4
+      accounts: [process.env.RINKEBY_PRIVATE_KEY || ""],
+      chainId: 4,
     },
     localhost: {
       url: "http://127.0.0.1:8545/",
       // Hardhat will automatically fills these accounts for us
       // accounts: ...
-      chainId: 31337
-    }
+      chainId: 31337,
+    },
   },
-  solidity: "0.8.9",
+  // solidity: "0.8.9",
+  solidity: {
+    compilers: [{ version: "0.8.9" }, { version: "0.6.6" }],
+  },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
     customChains: [
@@ -32,10 +35,10 @@ const config: HardhatUserConfig = {
         chainId: 4,
         urls: {
           apiURL: "https://api-rinkeby.etherscan.io/api",
-          browserURL: "https://rinkeby.etherscan.io"
-        }
-      }
-    ]
+          browserURL: "https://rinkeby.etherscan.io",
+        },
+      },
+    ],
   },
   gasReporter: {
     enabled: true,

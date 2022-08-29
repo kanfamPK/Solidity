@@ -1,5 +1,5 @@
+// this mocks is for price feed contract, because if we use local network, it wont have price feed chainlink so we have to deploy a fake version of price feed
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { networkConfig } from "../helper-hardhat-config";
 
 export default async (hre: HardhatRuntimeEnvironment) => {
   // @ts-ignore
@@ -7,12 +7,4 @@ export default async (hre: HardhatRuntimeEnvironment) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId: number = network.config.chainId!;
-  const ethUsdPriceFeedAddress = networkConfig[chainId].ethUsdPriceFeed;
-
-  // args is the args that will be passed into contract's contructor
-  const fundMe = await deploy("FundMe", {
-    from: deployer,
-    args: [],
-    log: true,
-  });
 };
