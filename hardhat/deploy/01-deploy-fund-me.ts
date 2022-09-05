@@ -7,7 +7,7 @@ export default async (hre: HardhatRuntimeEnvironment) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId: number = network.config.chainId!;
-  const ethUsdPriceFeedAddress = networkConfig[chainId].ethUsdPriceFeed;
+  // const ethUsdPriceFeedAddress = networkConfig[chainId].ethUsdPriceFeed;
 
   // args is the args that will be passed into contract's contructor
   const fundMe = await deploy("FundMe", {
